@@ -1,0 +1,332 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+ 
+ typedef struct nodo
+{
+    int inf;
+    struct nodo * next;
+}NODO;
+
+typedef struct
+{
+    NODO *INICIO;
+    NODO *FIM;
+}DESCRITOR;
+
+typedef DESCRITOR * FILA_ENC;
+
+void cria_fila (FILA_ENC *);
+int eh_vazia (FILA_ENC);
+void ins (FILA_ENC, int);
+int cons (FILA_ENC);
+void ret (FILA_ENC);
+int cons_ret (FILA_ENC);
+
+void cria_fila (FILA_ENC *pf)
+{
+    *pf=(DESCRITOR *) malloc (sizeof(DESCRITOR));
+    if (!pf)
+    {
+        printf("\nERRO! Memoria insuficiente!\n");
+        exit(1);
+    }
+    (*pf)->INICIO=(*pf)->FIM=NULL;
+}
+
+int eh_vazia (FILA_ENC f)
+{
+    return (f->INICIO == NULL);
+}
+
+void ins (FILA_ENC f, int v)
+{
+    NODO *novo;
+    novo = (NODO *) malloc (sizeof(NODO));
+    if (!novo)
+    {
+        printf("\nERRO! Memoria insuficiente");
+        exit(1);
+    }
+    novo->inf = v;
+    novo->next = NULL;
+    if (eh_vazia(f))
+        f->INICIO  = novo;
+    else
+        f->FIM->next = novo;
+    f->FIM = novo;
+}
+
+int cons (FILA_ENC f)
+{
+    if (eh_vazia(f))
+    {
+        printf("\nERRO! Consulta em fila vazia!\n");
+        exit(2);
+    }
+    else
+        return(f->INICIO->inf);
+}
+
+void ret (FILA_ENC f)
+{
+    if (eh_vazia(f))
+    {
+        printf("\nERRO! Retirada em fila vazia!\n");
+        exit(3);
+    }
+    else
+    {
+        NODO *aux = f->INICIO;
+        f->INICIO = f->INICIO->next;
+        if (!f->INICIO)
+            f->FIM=NULL;
+        free (aux);
+    }
+}
+
+int cons_ret (FILA_ENC f)
+{
+    if(eh_vazia(f))
+    {
+        printf("\nERRO! Consulta e retirada em fila vazia!\n");
+        exit(4);
+    }
+    else
+    {
+        int v = f->INICIO->inf;
+        NODO *aux = f->INICIO;
+        f->INICIO = f->INICIO->next;
+        if(!f->INICIO)
+            f->FIM=NULL;
+        free(aux);
+        return (v);
+    }
+}
+int main()
+{
+    int a[12][4];
+    int poltrona1[48];
+    int poltrona2[48];
+    int gratuidade1 = 0;
+    int gratuidade2 = 0;
+    int l = 0;
+    int c = 0;
+    int menu = 0;
+    int qtd = 0;
+    int t = 0;
+    int grts1 = 0;
+    int op = 0;
+    int bus = 0;
+    int bus1 = 0;
+    int bus1l = 0;
+    int tot1= 0;
+    int inte1 = 0 ;
+    int meia1 = 0 ;
+    int pas = 0 ;
+    int bus2 = 0;
+    int bus2l = 0;
+    int tot2 = 0;
+    int grts2 = 0;
+    int inte2 = 0;
+    int meia2 = 0;
+    int assent1 = 0;
+    int assent2 = 0;
+ 
+    for (l=0;l<12;l++){
+        for (c=0;c<4;c++){
+            qtd++;
+            a[l][c] = qtd;
+        }
+    }
+    while (menu!=4){
+        printf("\n      AED1 TRANSPORTES INTERMUNICIPAIS");
+        printf("\n      TELEFONE: 4002 8922");
+        printf("\n      AO INFINITO E ALEM!\n");
+        printf("\n MENU ");
+        printf("\n1-Vendas de Passagem");
+        printf("\n2-Lista de Onibus");
+        printf("\n3-Checagem de Vagas");
+        printf("\n4-Sair\n");
+        printf("\nOpcao desejada: ");
+        scanf("%d", &menu);
+        system("cls");
+ 
+        switch (menu){
+            case 1:
+			printf("\nVENDA DE PASSAGEM");
+                printf("\n");
+                printf("\nVALORES:");
+                printf("\nCD |  ONIBUS   |    SAIDA     |         DESTINO          | VALOR");           
+                printf("\n01 | Onibus 1  | Petrolina PE |       Sao Paulo SP       | R$450,00");                
+                printf("\n02 | Onibus 2  | Juazeiro BA  |       Salvador BA        | R$120,00");
+                printf("\n");
+                printf("\n");
+                printf("\nDigite o Codigo do Onibus: ");
+                scanf("%d", &bus);
+ 
+                switch(bus){
+                    case 1:
+                        bus1++;
+                        printf("\nOnibus 1 - Petrolina PE para Sao Paulo SP");
+                        printf("\nValor: R$450,00\nAssento:");                  
+                        scanf("%d", &assent1);
+                        if (bus1>48) {
+                        	printf("\nNAO HÁ VAGAS DISPONIVEIS PARA ESSE TRAJETO");
+                        	break;
+						}
+                        while (assent1>48) {
+                            printf("\nEste Onibus possui apenas 48 assentos, por favor, digite um assento valido\n");
+                            printf("\nAssento: ");
+                            scanf("%d", &assent1);
+                            system ("pause");
+                        }
+ 
+                        while (poltrona1[assent1] == 1) {
+                            printf("\nEste assento ja esta ocupado\n");
+                            printf("\nAssento: ");
+                            scanf("%d", &assent1);
+                            system ("pause");
+                        }
+ 
+                        poltrona1[assent1] = 1;
+ 
+                        printf("\n");
+                        printf("\n1 - Passagem Inteira");
+                        printf("\n2 - Passagem MEIA ");
+                        printf("\nDigite o Tipo de Passagem: ");
+                        scanf("%d", &pas);
+                        	break;
+						
+                        switch(pas)
+                        {
+                            case 1:
+                                inte1++;
+                                printf("\n___________________________________________________________");
+                                printf("\n|           Onibus 1 - AED1 TRANSPORTES INTERMUNICIPAIS   |");
+                                printf("\n|  Embarque: Petrolina - PE | Desembarque: Sao Paulo - SP |");                                
+                                printf("\n|Valor: R$130,00                                          |");
+                                printf("\n|Tipo de Passagem: INTEIRA                                |");
+                                printf("\n|Assento: %d                                               |", assent1);
+                                printf("\n-----------------------------------------------------------");
+                                printf("\n");
+                                printf("\nDigite 1 para imprimir passagem e voltar ao menu principal: ");
+                                scanf("%d", &op);
+                                break;
+                            case 2:
+                                meia1++;
+                                printf("\n___________________________________________________________");
+                                printf("\n|      Onibus 1 - AED1 TRANSPORTES INTERMUNICIPAIS        |");
+                                printf("\n|   Embarque: Juazeiro - BA | Desembarque: Salvador - BA  |");                                
+                                printf("\n|Valor: R$65,00                                           |");
+                                printf("\n|Tipo de Passagem: MEIA - ESTUDANTE                       |");
+                                printf("\n|Assento: %d                                              |", assent1);
+                                printf("\n-----------------------------------------------------------");
+                                printf("\nDigite 1 para imprimir passagem e voltar ao menu principal: ");
+                                scanf("%d", &op);
+                                break;
+                        }
+                        break;
+                    
+                    case 2:
+                        bus2++;
+                        printf("\nOnibus 2 - Guanambi BA para Belo Horizonte MG");
+                        printf("\nValor: R$110,00");                  
+                        printf("\nAssento: ");
+                        scanf("%d", &assent2);
+                        if (bus2>48) {
+                        	printf("\nNao ha mais vagas para este onibus.");
+                        	break;
+                        }
+                        while (assent2>48) {
+                            printf("\nEste Onibus possui apenas 48 assentos, por favor, digite um assento valido\n");
+                            printf("\nAssento: ");
+                            scanf("%d", &assent2);
+                            system ("pause");
+                        }
+ 
+                        while (poltrona2[assent2] == 1) {
+                            printf("\nEste assento ja esta ocupado\n");
+                            printf("\nAssento: ");
+                            scanf("%d", &assent2);
+                            system ("pause");
+                        }
+ 
+                        poltrona2[assent2] = 1;
+ 
+                        printf("\n");
+                        printf("\n1 - Passagem Inteira");
+                        printf("\n2 - Passagem MEIA ");
+			
+                        switch(pas)
+                        {
+                            case 1:
+                                inte2++;
+                                printf("\n______________________________________________________________");
+                                printf("\n|           Onibus 2 - VIACAO GUANAMBI TURISMO               |");
+                                printf("\n|Embarque: Guanambi - Bahia | Desembarque: Belo Horizonte MG |");                                
+                                printf("\n|Valor: R$110,00                                             |");
+                                printf("\n|Tipo de Passagem: INTEIRA                                   |");
+                                printf("\n|Assento: %d                                                  |", assent2);
+                                printf("\n--------------------------------------------------------------");
+                                printf("\n");
+                                printf("\nDigite 1 para imprimir passagem e voltar ao menu principal: ");
+                                scanf("%d", &op);
+                                break;
+                            case 2:
+                                meia2++;
+                                printf("\n______________________________________________________________");
+                                printf("\n|           Onibus 2 - VIACAO GUANAMBI TURISMO               |");
+                                printf("\n|Embarque: Guanambi - Bahia | Desembarque: Belo Horizonte MG |");                                
+                                printf("\n|Valor: R$55,00                                              |");
+                                printf("\n|Tipo de Passagem: MEIA                                      |");
+                                printf("\n|Assento: %d                                                  |", assent2);
+                                printf("\n--------------------------------------------------------------");
+                                printf("\nDigite 1 para imprimir passagem e voltar ao menu principal: ");
+                                scanf("%d", &op);
+                                break;
+                        }
+    				}
+            case 2:
+                 printf("\nLISTA DE ONIBUS");
+                 printf("\n");
+                 printf("\n01 - Onibus 1 - INTERESTADUAL - Petrolina PE a Sao Paulo SP");                 
+                 printf("\n02 - Onibus 2 - INTERESTADUAL - Juazeiro BA a Salvador BA \n\n\n");
+                 
+            case 3:
+                 printf("\nCHECAGEM DE VAGAS\n");
+                 printf("\nVALORES:");
+                 printf("\nCD |  ONIBUS   |    SAIDA    | DESTINO");
+                 printf("\n01 | Onibus 1  | Guanambi BA | Sao Paulo SP");                 
+                 printf("\n02 | Onibus 2  | Guanambi BA | Belo Horizonte MG");
+                 printf("\n");
+                 printf("\n");
+                 printf("\nDigite o Codigo do Onibus: ");
+                 scanf("%d", &bus);
+                 switch(bus)
+                 {
+                    case 01:
+                        bus1l = bus1 - 48;
+                        printf("\nAssentos vendidos e assentos disponiveis no Onibus 1:");
+                        printf("\n");
+                        printf("\nAssentos vendidos: %d", bus1);
+                        printf("\nAssentos Livres: %d", bus1l);
+                        printf("\n");
+                    break;
+                    case 02:
+                        bus2l = bus2 - 48;
+                        printf("\nAssentos vendidos e assentos disponiveis no Onibus 2:");
+                        printf("\n");
+                        printf("\nAssentos vendidos: %d", bus2);
+                        printf("\nAssentos Livres: %d", bus2l);
+                        printf("\n");
+                    break;
+                 }
+            break;
+            case 4:
+              break;
+            
+        }
+    }
+}
