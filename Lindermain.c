@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include<stdbool.h>
 
 typedef struct no{
     int codigo;
     int assentos[48];
+    bool cheio;
     struct no *proximo;
 }No;
 
@@ -20,11 +22,11 @@ void criar_lista(Lista *lista){
 }
 
 // procedimento para inserir no início
-int inserir_no_inicio(Lista *lista, int num){
+int inserir_no_inicio(Lista *lista, int num, int indice){
     No *novo = malloc(sizeof(No));
 
     if(novo){
-        novo->valor = num;
+        novo->assentos[indice] = num;
         novo->proximo = lista->inicio;
         lista->inicio = novo;
         if(lista->fim == NULL)
@@ -38,11 +40,11 @@ int inserir_no_inicio(Lista *lista, int num){
 	}
 
 // procedimento para inserir no fim
-int inserir_no_fim(Lista *lista, int num){
+int inserir_no_fim(Lista *lista, int num, int indice){
     No *aux, *novo = (No*) malloc (sizeof(No));
 
     if(novo){
-        novo->valor = num;
+        novo->assentos[indice] = num;
 
         // é o primeiro?
         if(lista->inicio == NULL){
@@ -65,23 +67,23 @@ int inserir_no_fim(Lista *lista, int num){
 }
 
 // procedimento para inserir ordenado
-int inserir_ordenado(Lista *lista, int num){
+int inserir_ordenado(Lista *lista, int num, int indice){
     No *aux, *novo = malloc(sizeof(No));
 
     if(novo){
-        novo->valor = num;
+        novo->assentos[indice] = num;
         if(lista->inicio == NULL){
-            inserir_no_inicio(lista, num);
+            inserir_no_inicio(lista, num, indice);
         }
-        else if(novo->valor < lista->inicio->valor){
-            inserir_no_inicio(lista, num);
+        else if(novo->assentos[indice]< lista->inicio->assentos[indice]){
+            inserir_no_inicio(lista, num, indice);
         }
         else{
             aux = lista->inicio;
-            while(aux->proximo != lista->inicio && novo->valor > aux->proximo->valor)
+            while(aux->proximo != lista->inicio && novo->assentos[indice] > aux->proximo->assentos[indice])
                 aux = aux->proximo;
             if(aux->proximo == lista->inicio)
-                inserir_no_fim(lista, num);
+                inserir_no_fim(lista, num, indice);
             else{
                 novo->proximo = aux->proximo;
                 aux->proximo = novo;
@@ -95,17 +97,17 @@ int inserir_ordenado(Lista *lista, int num){
 }
 
 // função para remover um nó
-No* remover(Lista *lista, int num){
+No* remover(Lista *lista, int num, int indice){
     No *aux, *remover = NULL;
 
     if(lista->inicio){
-        if(lista->inicio == lista->fim && lista->inicio->valor == num){
+        if(lista->inicio == lista->fim && lista->inicio->assentos[indice] == num){
             remover = lista->inicio;
             lista->inicio = NULL;
             lista->fim = NULL;
             lista->tam--;
         }
-        else if(lista->inicio->valor == num){
+        else if(lista->inicio-> assentos[indice] == num){
             remover = lista->inicio;
             lista->inicio = remover->proximo;
             lista->fim->proximo = lista->inicio;
@@ -113,9 +115,9 @@ No* remover(Lista *lista, int num){
         }
         else{
             aux = lista->inicio;
-            while(aux->proximo != lista->inicio && aux->proximo->valor != num)
+            while(aux->proximo != lista->inicio && aux->proximo->assentos[indice] != num)
                 aux = aux->proximo;
-            if(aux->proximo->valor == num){
+            if(aux->proximo->assentos[indice] == num){
                 if(lista->fim == aux->proximo){
                     remover = aux->proximo;
                     aux->proximo = remover->proximo;
@@ -134,12 +136,12 @@ No* remover(Lista *lista, int num){
 }
 
 // função para buscar um valor
-No* buscar(Lista *lista, int num){
+No* buscar(Lista *lista, int num, int indice){
     No *aux = lista->inicio;
 
     if(aux){
         do{
-            if(aux->valor == num)
+            if(aux->assentos[indice] == num)
                 return aux;
             aux = aux->proximo;
         }while(aux != lista->inicio);
@@ -150,20 +152,24 @@ No* buscar(Lista *lista, int num){
 // procedimento para imprimir a lista circular
 void imprimir(Lista lista){
     No *no = lista.inicio;
+    int i;
     printf("\n\tLista tam %d: ", lista.tam);
     if(no){
         do{
-            printf("%d ", no->valor);
-            no = no->proximo;
+        	for(i = 0; i < 48; i++){
+			printf("%d ", no->assentos[i]);
+        }
+			no = no->proximo;
         }while(no != lista.inicio);
-        printf("\nInicio: %d\n", no->valor);
+        	for(i = 0; i < 48; i++){
+			printf("%d ", no->assentos[i]);
     }
     printf("\n\n");
 }
 
 int main(){
 
-    int opcao, valor = 0, anterior;
+    int opcao, valor = 0, anterior, i;
     //No *lista = NULL;
     Lista lista;
     No *removido;
@@ -176,30 +182,30 @@ int main(){
 
         switch(opcao){
         case 1:
-        	if (buscar(&lista, valor) != NULL)
+        	if (buscar(&lista, valor, i) != NULL)
         		continue;
         	else{
             printf("Digite um valor: ");
             scanf("%d", &valor);
-            inserir_no_inicio(&lista, valor);
+            inserir_no_inicio(&lista, valor, i);
             break;
         }
         case 2:
             printf("Digite um valor: ");
             scanf("%d", &valor);
-            inserir_no_fim(&lista, valor);
+            inserir_no_fim(&lista, valor, i);
             break;
         case 3:
             printf("Digite um valor: ");
             scanf("%d", &valor);
-            inserir_ordenado(&lista, valor);
+            inserir_ordenado(&lista, valor, i);
             break;
         case 4:
             printf("Digite um valor a ser removido: ");
             scanf("%d", &valor);
-            removido = remover(&lista, valor);
+            removido = remover(&lista, valor, i);
             if(removido){
-                printf("Elemento removido: %d\n", removido->valor);
+                printf("Elemento removido: %d\n", removido->assentos[i]);
                 free(removido);
             }
             else
@@ -211,9 +217,9 @@ int main(){
         case 6:
             printf("Digite um valor a ser buscado: ");
             scanf("%d", &valor);
-            removido = buscar(&lista, valor);
+            removido = buscar(&lista, valor, i);
             if(removido)
-                printf("Valor encontrado: %d\n", removido->valor);
+                printf("Valor encontrado: %d\n", removido->assentos[i]);
             else
                 printf("Valor nao encontrado!\n");
             break;
