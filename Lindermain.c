@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include<stdbool.h>
+#include <stdbool.h>
 
 typedef struct no{
     int codigo;
@@ -21,7 +21,7 @@ void criar_lista(Lista *lista){
     lista->tam = 0;
 }
 
-// procedimento para inserir no início
+// procedimento para inserir no inÃ­cio
 int inserir_no_inicio(Lista *lista, int num, int indice){
     No *novo = malloc(sizeof(No));
 
@@ -46,7 +46,7 @@ int inserir_no_fim(Lista *lista, int num, int indice){
     if(novo){
         novo->assentos[indice] = num;
 
-        // é o primeiro?
+        // Ã© o primeiro?
         if(lista->inicio == NULL){
             lista->inicio = novo;
             lista->fim = novo;
@@ -55,7 +55,7 @@ int inserir_no_fim(Lista *lista, int num, int indice){
         else{
             lista->fim->proximo = novo;
             lista->fim = novo;
-            // as duas linhas a seguir são sinônimas. Escolha a que achar mais fácil compreender
+            // as duas linhas a seguir sÃ£o sinÃ´nimas. Escolha a que achar mais fÃ¡cil compreender
             //lista->fim->proximo = lista->inicio;
             novo->proximo = lista->inicio;
         }
@@ -96,7 +96,7 @@ int inserir_ordenado(Lista *lista, int num, int indice){
     return 0;
 }
 
-// função para remover um nó
+// funÃ§Ã£o para remover um nÃ³
 No* remover(Lista *lista, int num, int indice){
     No *aux, *remover = NULL;
 
@@ -135,7 +135,7 @@ No* remover(Lista *lista, int num, int indice){
     return remover;
 }
 
-// função para buscar um valor
+// funÃ§Ã£o para buscar um valor
 No* buscar(Lista *lista, int num, int indice){
     No *aux = lista->inicio;
 
