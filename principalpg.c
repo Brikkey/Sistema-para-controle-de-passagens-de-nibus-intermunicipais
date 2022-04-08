@@ -6,7 +6,7 @@
 
 typedef struct passagem{
 		char nome[100];
-	int cpf, telefone;
+		int cpf, telefone;
 }pessoa;
 
 typedef struct pilha {		//vai mudar pouca coisa para a outra pilha
@@ -15,7 +15,26 @@ typedef struct pilha {		//vai mudar pouca coisa para a outra pilha
 	int tamElem;
 }pilha_t;
 
+typedef struct nodo
+{
+    int inf;
+    struct nodo * next;
+}NODO;
 
+typedef struct
+{
+    NODO *INICIO;
+    NODO *FIM;
+}DESCRITOR;
+
+typedef DESCRITOR * FILA_ENC;
+void cria_fila (FILA_ENC *);
+int eh_vazia (FILA_ENC);
+void ins (FILA_ENC, int);
+int cons (FILA_ENC);
+void ret (FILA_ENC);
+int cons_ret (FILA_ENC);
+//
 pilha_t *create(int tamElem);
 void destroy(pilha_t *p);
 int isFull(pilha_t *p);
@@ -53,8 +72,7 @@ int main(){
     int grts2 = 0;
     int inte2 = 0;
     int meia2 = 0;
-
-
+	int assento =0;
     do{
         printf("\n      AED1 TRANSPORTES INTERMUNICIPAIS");
         printf("\n      TELEFONE: 4002 8922");
@@ -63,7 +81,8 @@ int main(){
         printf("\n1-Vendas de Passagem");
         printf("\n2-Lista de Onibus");
         printf("\n3-Checagem de Vagas");
-        printf("\n4-Sair\n");
+        printf("\n4-Reserva de Vagas");
+		printf("\n5-Sair\n");
         printf("\nOpcao desejada: ");
         scanf("%d", &menu);
         system("cls");
@@ -87,7 +106,7 @@ int main(){
                         printf("\nOnibus 1 - Petrolina PE para Sao Paulo SP");
                         printf("\nValor: R$450,00");
                         if (isFull(p1)) {
-                        	printf("\nNAO HÁ VAGAS DISPONIVEIS PARA ESSE TRAJETO");
+                        	printf("\nNAO HÃ VAGAS DISPONIVEIS PARA ESSE TRAJETO");
                         	break;
 						}
         
@@ -170,7 +189,6 @@ int main(){
                                 printf("\n|Valor: R$110,00                                             |");
                                 printf("\n|Tipo de Passagem: INTEIRA                                   |");
                                 printf("\n--------------------------------------------------------------");
-                                printf("\n");
                                  break;
                             case 2:
                                 meia2++;
@@ -247,11 +265,136 @@ int main(){
           				printf("Valor invalido");
                  }
             break;
+            case 4:
+            	printf("\n\nRESERVA DE PASSAGEM");
+            	printf("\nCD |  ONIBUS   |    SAIDA     |         DESTINO          | VALOR");           
+                printf("\n01 | Onibus 1  | Petrolina PE |       Sao Paulo SP       | R$450,00");                
+                printf("\n02 | Onibus 2  | Juazeiro BA  |       Salvador BA        | R$120,00");
           	default:
           		printf("Valor invalido");
-            
+            printf("\nDigite o Codigo do Onibus: ");
+                scanf("%d", &bus);
+ 
+                switch(bus){
+                    case 1:
+                        bus1++;
+                        printf("\nOnibus 1 - Petrolina PE para Sao Paulo SP");
+                        printf("\nValor: R$450,00");
+                        if (isFull(p1)) {
+                        	printf("\nNAO HÃ VAGAS DISPONIVEIS PARA ESSE TRAJETO");
+                        	break;
+						}
+        
+                        printf("\n");
+                        printf("\n1 - Passagem Inteira");
+                        printf("\n2 - Passagem MEIA ");
+                        printf("\nDigite o Tipo de Passagem: ");
+                        scanf("%d", &pas);
+                        switch(pas)
+                        {
+                            case 1:
+                                
+                                printf("\n___________________________________________________________");
+                                printf("\n|           Onibus 1 - AED1 TRANSPORTES INTERMUNICIPAIS   |");
+                                printf("\n|  Embarque: Petrolina - PE | Desembarque: Sao Paulo - SP |");   
+								printf("\n| 			 Digite o nome do passageiro                |\n");
+								scanf(" %[^\n]", passageiro.nome);
+								printf("\n| 					 Digite o CPF                       |\n");  
+								scanf("%d", &passageiro.cpf);
+								printf("\n| 				   Digite o telefone                    |\n");  
+								scanf("%d", &passageiro.telefone); 
+								push(p1, &passageiro);                        
+                                printf("\n|Valor: R$130,00                                          |");
+                                printf("\n|Tipo de Passagem: INTEIRA                                |");
+                                printf("\n-----------------------------------------------------------");
+                                printf("\n");
+                                inte1++;
+                                
+                                if (eh_vazia)
+                                break;
+                            case 2:
+
+                                printf("\n___________________________________________________________");
+                                printf("\n|      Onibus 1 - AED1 TRANSPORTES INTERMUNICIPAIS        |");
+                                printf("\n|   Embarque: Petrolina - PE | Desembarque: Sao Paulo - SP|");  
+								printf("\n| 			 Digite o nome do passageiro                |\n");
+								scanf(" %[^\n]", passageiro.nome);
+								printf("\n| 					 Digite o CPF                       |\n");  
+								scanf("%d", &passageiro.cpf);
+								printf("\n| 				   Digite o telefone                    |\n");  
+								scanf("%d", &passageiro.telefone); 
+								push(p1, &passageiro);                       
+                                printf("\n|Valor: R$65,00                                           |");
+                                printf("\n|Tipo de Passagem: MEIA - ESTUDANTE                       |");
+                                printf("\n-----------------------------------------------------------");
+                                meia1++;
+                                break;
+                                default:
+          						printf("Valor invalido");
+                        }
+                        break;
+                    
+             	      		 case 2:
+                       			bus2++;
+                      			printf("\nOnibus 2 - Guanambi BA para Belo Horizonte MG");
+                        		printf("\nValor: R$110,00");                  
+                        		if (bus2>48) {
+                        		printf("\nNao ha mais vagas para este onibus.");
+                        		break;
+                       			}
+
+ 
+                      		printf("\n");
+                      	   	printf("\n1 - Passagem Inteira");
+                       		printf("\n2 - Passagem MEIA \n\n\n");
+                       		scanf("%d", &pas);
+			
+                        switch(pas)
+                        {
+                            case 1:
+                                inte2++;
+                                printf("\n______________________________________________________________");
+                                printf("\n|           Onibus 2 - AED1               |");
+                                printf("\n|Embarque: Juazeiro - Bahia | Desembarque: Salvador - BA |"); 
+								printf("\n| 			 Digite o nome do passageiro:                |");
+								scanf(" %[^\n]", passageiro.nome);
+								printf("\n| 					 Digite o CPF:                       |");  
+								scanf("%d", &passageiro.cpf);
+								printf("\n| 				   Digite o telefone:                    |");  
+								scanf("%d", &passageiro.telefone);  
+								push(p2, &passageiro);                                                      
+                                printf("\n|Valor: R$110,00                                             |");
+                                printf("\n|Tipo de Passagem: INTEIRA                                   |");
+                                printf("\n--------------------------------------------------------------");
+                                 break;
+                            case 2:
+                                meia2++;
+                                printf("\n______________________________________________________________");
+                                printf("\n|           Onibus 2 -  AED 1              |");
+                                printf("\n|Embarque: Juazeiro - Bahia | Desembarque: Salvador - BA |"); 
+								printf("\n| 			 Digite o nome do passageiro:                |");
+								scanf(" %[^\n]", passageiro.nome);
+								printf("\n| 					 Digite o CPF:                       |");  
+								scanf("%d", &passageiro.cpf);
+								printf("\n| 				   Digite o telefone:                    |");  
+								scanf("%d", &passageiro.telefone); 
+								push(p2, &passageiro);                                                       
+                                printf("\n|Valor: R$55,00                                              |");
+                                printf("\n|Tipo de Passagem: MEIA                                      |");
+                                printf("\n--------------------------------------------------------------");
+                                printf("\n\n\nDigite o numero do assento desejado: ENTRE 1 e 48");
+                                scanf("%d", &assento);
+                                if (assento==1);
+                                break;
+                            default:
+          						printf("Valor invalido");
+                        }
+            			break;
+            			default:
+          					printf("Valor invalido");	
+    				}
         }
-    }while(menu != 4);
+    }while(menu != 5);
     	destroy(p1);
     	destroy(p2);
 }
@@ -301,7 +444,7 @@ int isEmpty(pilha_t *p){
 		return 0;
 }
 
-int push (pilha_t *p, pessoa *Passageiro){  //a função é int, porque quero retornar um codigo de erro, se n era void
+int push (pilha_t *p, pessoa *Passageiro){  //a funÃ§Ã£o Ã© int, porque quero retornar um codigo de erro, se n era void
 	assert ( p != NULL);
 	
 	if(isFull(p) == 1){
@@ -319,7 +462,7 @@ int pop (pilha_t *p, pessoa *Passageiro){
 	assert (p != NULL);
 	
 	if (isEmpty(p) == -1){
-		printf("Não contem passagens compradas");
+		printf("NÃ£o contem passagens compradas");
 		return -2;
 	}
 	
@@ -335,7 +478,7 @@ int top (pilha_t *p, pessoa *Passageiro){ // consulta do valor do topo da pilha
 	assert (p != NULL);
 	
 	if (isEmpty(p) == -1){
-		printf("Não contem passagens compradas");
+		printf("NÃ£o contem passagens compradas");
 		return -2;
 	}
 	
@@ -354,4 +497,95 @@ int imprimir(pilha_t *p){
 	for (i=p->tamElem-1; i>=0; i--) {
 		printf("\npassageiro: %s", p->passageiro);
 	}
+}
+void cria_fila (FILA_ENC *pf)
+{
+    *pf=(DESCRITOR *) malloc (sizeof(DESCRITOR));
+    if (!pf)
+    {
+        printf("\nERRO! Memoria insuficiente!\n");
+        exit(1);
+    }
+    (*pf)->INICIO=(*pf)->FIM=NULL;
+}
+
+int eh_vazia (FILA_ENC f)
+{
+    return (f->INICIO == NULL);
+}
+
+void ins (FILA_ENC f, int passageiro)
+{
+    NODO *novo;
+    novo = (NODO *) malloc (sizeof(NODO));
+    if (!novo)
+    {
+        printf("\nERRO! Memoria insuficiente");
+        exit(1);
+    }
+    novo->inf = passageiro;
+    novo->next = NULL;
+    if (eh_vazia(f))
+        f->INICIO  = novo;
+    else
+        f->FIM->next = novo;
+    f->FIM = novo;
+}
+
+int cons (FILA_ENC f)
+{
+    if (eh_vazia(f))
+    {
+        printf("\nERRO! Consulta em fila vazia!\n");
+        exit(2);
+    }
+    else
+        return(f->INICIO->inf);
+}
+
+void ret (FILA_ENC f)
+{
+    if (eh_vazia(f))
+    {
+        printf("\nERRO! Retirada em fila vazia!\n");
+        exit(3);
+    }
+    else
+    {
+        NODO *aux = f->INICIO;
+        f->INICIO = f->INICIO->next;
+        if (!f->INICIO)
+            f->FIM=NULL;
+        free (aux);
+    }
+}
+
+int cons_ret (FILA_ENC f)
+{
+    if(eh_vazia(f))
+    {
+        printf("\nERRO! Consulta e retirada em fila vazia!\n");
+        exit(4);
+    }
+    else
+    {
+        int v = f->INICIO->inf;
+        NODO *aux = f->INICIO;
+        f->INICIO = f->INICIO->next;
+        if(!f->INICIO)
+            f->FIM=NULL;
+        free(aux);
+        return (v);
+    }
+}
+
+void reserva_por_fila (FILA_ENC *pf){
+	int assento;
+	FILA_ENC reservada;
+	if (eh_vazia(reservada))
+	cria_fila(&reservada);
+		
+		while(!eh_vazia)
+		ins(reservada, assento);
+			
 }
