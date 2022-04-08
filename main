@@ -2,10 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
- 
+ int v;
  typedef struct nodo
 {
-    int inf;
+    int assento;
     struct nodo * next;
 }NODO;
 
@@ -16,10 +16,9 @@ typedef struct
 }DESCRITOR;
 
 typedef DESCRITOR * FILA_ENC;
-
 void cria_fila (FILA_ENC *);
 int eh_vazia (FILA_ENC);
-void ins (FILA_ENC, int);
+void ins (FILA_ENC, int assento);
 int cons (FILA_ENC);
 void ret (FILA_ENC);
 int cons_ret (FILA_ENC);
@@ -40,7 +39,7 @@ int eh_vazia (FILA_ENC f)
     return (f->INICIO == NULL);
 }
 
-void ins (FILA_ENC f, int v)
+void ins (FILA_ENC f, int assento)
 {
     NODO *novo;
     novo = (NODO *) malloc (sizeof(NODO));
@@ -49,7 +48,7 @@ void ins (FILA_ENC f, int v)
         printf("\nERRO! Memoria insuficiente");
         exit(1);
     }
-    novo->inf = v;
+    novo->assento = v;
     novo->next = NULL;
     if (eh_vazia(f))
         f->INICIO  = novo;
@@ -66,7 +65,7 @@ int cons (FILA_ENC f)
         exit(2);
     }
     else
-        return(f->INICIO->inf);
+        return(f->INICIO->assento);
 }
 
 void ret (FILA_ENC f)
@@ -95,7 +94,7 @@ int cons_ret (FILA_ENC f)
     }
     else
     {
-        int v = f->INICIO->inf;
+        int v = f->INICIO->assento;
         NODO *aux = f->INICIO;
         f->INICIO = f->INICIO->next;
         if(!f->INICIO)
@@ -104,8 +103,36 @@ int cons_ret (FILA_ENC f)
         return (v);
     }
 }
+void reservada (FILA_ENC *pl){
+FILA_ENC filareserva;
+int seg, min, hr = 0;
+int i=0;
+
+	if(eh_vazia(filareserva)){
+		cria_fila (&filareserva);
+    }
+	else{
+	ins (filareserva, v);
+    printf ("Você tem até 24h para efetuar a compra");
+        do { 
+            if (seg==60)
+            	seg=0;
+                min++;
+            if (min==60)
+            	min=0;
+            	hr++;
+            if (hr==24){
+            	hr=0;
+				i=1;
+				ret (filareserva);		
+			}
+		seg++;
+		}while(i==0);
+		}
+}
 int main()
 {
+	int assento=0;
     int a[12][4];
     int poltrona1[48];
     int poltrona2[48];
@@ -145,7 +172,7 @@ int main()
         printf("\n      TELEFONE: 4002 8922");
         printf("\n      AO INFINITO E ALEM!\n");
         printf("\n MENU ");
-        printf("\n1-Vendas de Passagem");
+        printf("\n1-Venda e reserva de passagens");
         printf("\n2-Lista de Onibus");
         printf("\n3-Checagem de Vagas");
         printf("\n4-Sair\n");
@@ -155,14 +182,11 @@ int main()
  
         switch (menu){
             case 1:
-			printf("\nVENDA DE PASSAGEM");
-                printf("\n");
-                printf("\nVALORES:");
+			printf("\nVENDA DE PASSAGENS");
+                printf("\n\nVALORES:");
                 printf("\nCD |  ONIBUS   |    SAIDA     |         DESTINO          | VALOR");           
                 printf("\n01 | Onibus 1  | Petrolina PE |       Sao Paulo SP       | R$450,00");                
-                printf("\n02 | Onibus 2  | Juazeiro BA  |       Salvador BA        | R$120,00");
-                printf("\n");
-                printf("\n");
+                printf("\n02 | Onibus 2  | Juazeiro BA  |       Salvador BA        | R$120,00\n\n");
                 printf("\nDigite o Codigo do Onibus: ");
                 scanf("%d", &bus);
  
@@ -170,34 +194,64 @@ int main()
                     case 1:
                         bus1++;
                         printf("\nOnibus 1 - Petrolina PE para Sao Paulo SP");
-                        printf("\nValor: R$450,00\nAssento:");                  
+                        printf("\nValor: R$450,00\nOBS: DIGITE UM NUMERO ENTRE 1 E 48\nAssento:");                  
                         scanf("%d", &assent1);
                         if (bus1>48) {
                         	printf("\nNAO HÁ VAGAS DISPONIVEIS PARA ESSE TRAJETO");
                         	break;
-						}
-                        while (assent1>48) {
-                            printf("\nEste Onibus possui apenas 48 assentos, por favor, digite um assento valido\n");
-                            printf("\nAssento: ");
-                            scanf("%d", &assent1);
-                            system ("pause");
-                        }
+					}
  
                         while (poltrona1[assent1] == 1) {
-                            printf("\nEste assento ja esta ocupado\n");
-                            printf("\nAssento: ");
-                            scanf("%d", &assent1);
-                            system ("pause");
-                        }
+                            
+							int aux;
+							printf("\nEste assento ja esta ocupado\n");
+                            printf("Deseja entrar na fila de espera?");
+							printf("\n1 - SIM");
+							printf("\n2 - NAO\nOpcao:");
+							scanf("%d", &aux);
+								switch (aux){
+									case 1:
+										FILA_ENC filareserva;
+										int i, seg, min, hr = 0;
+											if(eh_vazia(filareserva))
+												cria_fila (&filareserva);
+											else{
+												ins (filareserva, v);
+                                				printf ("Você tem até 24h para efetuar a compra"); 
+                               					 v++;	
+         										do { 
+            										if (seg==60){
+													
+            										seg=0;
+                									min++;}
+            										if (min==60){
+            										min=0;
+            										hr++;}
+            										if (hr==24){
+            										hr=0;
+													i=1;
+													ret (filareserva);}
+												}while (i==0);
+												seg++;
+											}
+								break;
+								}
+								case 2:
+								printf("\nDigite outro assento: ");
+                            	scanf("%d", &assent1); 
+                            	break;
+                            	default: printf("Opcao invalida");
+                            }
+                            
+							
+                        
  
                         poltrona1[assent1] = 1;
- 
                         printf("\n");
                         printf("\n1 - Passagem Inteira");
                         printf("\n2 - Passagem MEIA ");
                         printf("\nDigite o Tipo de Passagem: ");
                         scanf("%d", &pas);
-                        	break;
 						
                         switch(pas)
                         {
@@ -227,8 +281,7 @@ int main()
                                 scanf("%d", &op);
                                 break;
                         }
-                        break;
-                    
+                }
                     case 2:
                         bus2++;
                         printf("\nOnibus 2 - Guanambi BA para Belo Horizonte MG");
@@ -258,7 +311,9 @@ int main()
                         printf("\n");
                         printf("\n1 - Passagem Inteira");
                         printf("\n2 - Passagem MEIA ");
-			
+						printf("\nDigite o Tipo de Passagem: ");
+                        scanf("%d", &pas);
+                        
                         switch(pas)
                         {
                             case 1:
@@ -287,7 +342,9 @@ int main()
                                 scanf("%d", &op);
                                 break;
                         }
-    				}
+    				
+    	
+    
             case 2:
                  printf("\nLISTA DE ONIBUS");
                  printf("\n");
